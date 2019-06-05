@@ -13,10 +13,10 @@
 	},
 	"repository": {
 		"type": "git",
-		"url": ""
+		"url": "https://github.com/rohgarg/jekyll-post"
 	},
 	"bugs": {
-		"url": ""
+		"url": "https://github.com/rohgarg/jekyll-post/issues"
 	},
 	"categories": [
 		"Other"

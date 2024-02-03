@@ -39,7 +39,9 @@ createFile(dirName: string, newFileName: string): Promise<string> {
   const templateExists: boolean = templatePath !== undefined &&
                                   fs.existsSync(templatePath);
   const fileExists: boolean = fs.existsSync(fileName);
-  const frontMatter = templateExists ? fs.readFileSync(templatePath) : '';
+  const frontMatter = templateExists ? 
+    Buffer.from(replaceDate(fs.readFileSync(templatePath).toString('utf-8')), 'utf-8') : '';
+
   setFrontMatter(!fileExists && !templateExists);
   if (!fileExists) {
     fs.appendFileSync(fileName, frontMatter);
@@ -93,6 +95,27 @@ getDateTime(): string {
              String(today.getMinutes()).padStart(2, '0');
   return yyyy + '-' + mm + '-' + dd + ' ' + time;
 }
+
+export function 
+replaceDate(data: string): string {
+  var formattedString = data.replace(/date:.*$/m, function(match: string) {
+    var today = new Date();
+    var dd = String(today.getDate()).padStart(2, '0');
+    var mm = String(today.getMonth() + 1).padStart(2, '0');
+    var yyyy = today.getFullYear();
+    var hours = String(today.getHours()).padStart(2, '0');
+    var minutes = String(today.getMinutes()).padStart(2, '0');
+
+    return match.replace(/YYYY/g, `${yyyy}`)
+                .replace(/MM/g, mm)
+                .replace(/DD/g, dd)
+                .replace(/hh/g, hours)
+                .replace(/mm/g, minutes);
+  });
+
+  return formattedString;
+}
+
 
 export function
 addDateToFilename(fileName: string): string {
